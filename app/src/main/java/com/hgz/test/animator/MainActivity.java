@@ -1,6 +1,7 @@
 package com.hgz.test.animator;
 
 import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
@@ -30,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
 //                    useViewPropertyAnimator();
 //                useAnimatorSet();
 //                useObjectAnimatorSet();
-                useValueAnimatorSet();
+//                useValueAnimatorSet();
+//                useValueAnimatorXml();
+//                useObjectAnimatorXml();
+                useAnimatorXml();
             }
         });
 
@@ -140,6 +144,31 @@ public class MainActivity extends AppCompatActivity {
         });
         valueAnimator.setDuration(3000);
         valueAnimator.start();
+    }
+    //通过引用ValueAnimation的xml文件完成动画
+    private void useValueAnimatorXml(){
+        ValueAnimator animator = (ValueAnimator) AnimatorInflater.loadAnimator(MainActivity.this,R.animator.value_animator);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animatedValue = (float) animation.getAnimatedValue();
+                showIv.setAlpha(animatedValue);
+            }
+        });
+        animator.setDuration(3000);
+        animator.start();
+    }
+    //通过引用ObjectAnimator的xml文件完成动画
+    private void useObjectAnimatorXml(){
+        ObjectAnimator animator = (ObjectAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.object_animator);
+        animator.setTarget(showIv);
+        animator.start();
+    }
+    //通过引用AnimatorSet的xml文件完成动画
+    private void useAnimatorXml(){
+        AnimatorSet animator = (AnimatorSet) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.set_animator);
+        animator.setTarget(showIv);
+        animator.start();
     }
 
 }
