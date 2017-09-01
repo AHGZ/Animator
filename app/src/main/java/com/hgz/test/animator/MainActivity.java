@@ -1,7 +1,9 @@
 package com.hgz.test.animator;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,8 +26,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 //                useValueAnimator();
-                 useObjectAnimator();
+//                 useObjectAnimator();
 //                    useViewPropertyAnimator();
+//                useAnimatorSet();
+//                useObjectAnimatorSet();
+                useValueAnimatorSet();
             }
         });
 
@@ -102,4 +107,39 @@ public class MainActivity extends AppCompatActivity {
                 .setStartDelay(2000)
                 .start();
     }
+    //使用AnimatorSet的方法完成组合动画
+    private void useAnimatorSet(){
+        AnimatorSet animatorSet = new AnimatorSet();
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(showIv, "alpha", 0f, 1f);
+        ObjectAnimator translationX = ObjectAnimator.ofFloat(showIv, "translationX", 0f, 200f);
+        animatorSet.playTogether(alpha,translationX);
+        animatorSet.setDuration(3000);
+        animatorSet.start();
+    }
+    //使用ObjectAnimator完成组合动画
+    private void useObjectAnimatorSet(){
+        PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0f, 1f);
+        PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", 0f, 200f);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofPropertyValuesHolder(showIv, alpha, translationX);
+        objectAnimator.setDuration(3000);
+        objectAnimator.start();
+    }
+    //使用ValueAnimator完成组合动画
+    private void useValueAnimatorSet(){
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0f, 1f);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animatedValue = (float) animation.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = showIv.getLayoutParams();
+                layoutParams.width= (int) (animatedValue*300);
+                layoutParams.height= (int) (animatedValue*300);
+                showIv.setLayoutParams(layoutParams);
+                showIv.setAlpha(animatedValue);
+            }
+        });
+        valueAnimator.setDuration(3000);
+        valueAnimator.start();
+    }
+
 }
