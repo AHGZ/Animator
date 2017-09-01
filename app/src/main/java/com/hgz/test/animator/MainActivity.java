@@ -6,35 +6,49 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageView showIv;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         showIv = (ImageView) findViewById(R.id.showIv);
-
+        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
         showIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //调用使用ValueAnimator的方法完成动画
 //                useValueAnimator();
+                //调用使用ObjectAnimator的方法完成动画
 //                 useObjectAnimator();
+                //调用使用ViewPropertyAnimator的方法完成动画
 //                    useViewPropertyAnimator();
+                //调用使用AnimatorSet的方法完成组合动画
 //                useAnimatorSet();
+                //调用使用ObjectAnimator完成组合动画
 //                useObjectAnimatorSet();
+                //调用使用ValueAnimator完成组合动画
 //                useValueAnimatorSet();
+                //调用通过引用ValueAnimation的xml文件完成动画
 //                useValueAnimatorXml();
+                //调用通过引用ObjectAnimator的xml文件完成动画
 //                useObjectAnimatorXml();
-                useAnimatorXml();
+                //调用通过引用AnimatorSet的xml文件完成动画
+//                useAnimatorSetXml();
+                //调用通过值动画来改变背景颜色
+                ValueAnimatorSetBackgrundColor();
+
             }
         });
 
@@ -165,10 +179,25 @@ public class MainActivity extends AppCompatActivity {
         animator.start();
     }
     //通过引用AnimatorSet的xml文件完成动画
-    private void useAnimatorXml(){
+    private void useAnimatorSetXml(){
         AnimatorSet animator = (AnimatorSet) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.set_animator);
         animator.setTarget(showIv);
         animator.start();
+    }
+    //通过值动画来改变背景颜色
+    private void ValueAnimatorSetBackgrundColor(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ValueAnimator valueAnimator = ValueAnimator.ofArgb(0xffff0000, 0xff0000ff,0xff00ff00);
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int animatedValue = (int) animation.getAnimatedValue();
+                    relativeLayout.setBackgroundColor(animatedValue);
+                }
+            });
+            valueAnimator.setDuration(2000);
+            valueAnimator.start();
+        }
     }
 
 }
