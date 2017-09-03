@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,33 +48,38 @@ public class MainActivity extends AppCompatActivity {
                 //调用通过引用AnimatorSet的xml文件完成动画
 //                useAnimatorSetXml();
                 //调用通过值动画来改变背景颜色
-                ValueAnimatorSetBackgrundColor();
+//                ValueAnimatorSetBackgrundColor();
+
 
             }
         });
+        //通过ValueAnimator完成对自定义View对象的动画效果
+        ValueAnimatorOfObject();
+    }
 
-    }
     //使用ValueAnimator的方法完成动画
-    private void useValueAnimator(){
+    private void useValueAnimator() {
 //        属性动画  ValueAnimator 的用法  ,属性动画本质是值动画
-                ValueAnimator valueAnimator = ValueAnimator.ofFloat(0f, 1f);
-                valueAnimator.setDuration(3000);
-                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        float animatedValue = (float) animation.getAnimatedValue();
-                        //设置透明
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0f, 1f);
+        valueAnimator.setDuration(3000);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animatedValue = (float) animation.getAnimatedValue();
+                //设置透明
 //                        showIv.setAlpha(animatedValue);
-                        ViewGroup.LayoutParams layoutParams = showIv.getLayoutParams();
-                        layoutParams.width= (int) (animatedValue*500);
-                        layoutParams.height= (int) (animatedValue*500);
-                        showIv.setLayoutParams(layoutParams);
-                    }
-                });
-                valueAnimator.start();
+                ViewGroup.LayoutParams layoutParams = showIv.getLayoutParams();
+                layoutParams.width = (int) (animatedValue * 500);
+                layoutParams.height = (int) (animatedValue * 500);
+                showIv.setLayoutParams(layoutParams);
+            }
+        });
+
+        valueAnimator.start();
     }
+
     //使用ObjectAnimator的方法完成动画
-    private void useObjectAnimator(){
+    private void useObjectAnimator() {
         //透明度变化
 //        ObjectAnimator alphaObjectAnimator = ObjectAnimator.ofFloat(showIv,"alpha",0,1);
 //        alphaObjectAnimator.setDuration(3000).start();
@@ -113,8 +119,9 @@ public class MainActivity extends AppCompatActivity {
         scaleObjectAnimator.start();
 
     }
+
     //使用ViewPropertyAnimator的方法完成动画
-    private void useViewPropertyAnimator(){
+    private void useViewPropertyAnimator() {
         showIv.animate().alpha(0.5f)
                 .translationX(300)
                 .scaleX(2)
@@ -125,33 +132,36 @@ public class MainActivity extends AppCompatActivity {
                 .setStartDelay(2000)
                 .start();
     }
+
     //使用AnimatorSet的方法完成组合动画
-    private void useAnimatorSet(){
+    private void useAnimatorSet() {
         AnimatorSet animatorSet = new AnimatorSet();
         ObjectAnimator alpha = ObjectAnimator.ofFloat(showIv, "alpha", 0f, 1f);
         ObjectAnimator translationX = ObjectAnimator.ofFloat(showIv, "translationX", 0f, 200f);
-        animatorSet.playTogether(alpha,translationX);
+        animatorSet.playTogether(alpha, translationX);
         animatorSet.setDuration(3000);
         animatorSet.start();
     }
+
     //使用ObjectAnimator完成组合动画
-    private void useObjectAnimatorSet(){
+    private void useObjectAnimatorSet() {
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0f, 1f);
         PropertyValuesHolder translationX = PropertyValuesHolder.ofFloat("translationX", 0f, 200f);
         ObjectAnimator objectAnimator = ObjectAnimator.ofPropertyValuesHolder(showIv, alpha, translationX);
         objectAnimator.setDuration(3000);
         objectAnimator.start();
     }
+
     //使用ValueAnimator完成组合动画
-    private void useValueAnimatorSet(){
+    private void useValueAnimatorSet() {
         ValueAnimator valueAnimator = ValueAnimator.ofFloat(0f, 1f);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float animatedValue = (float) animation.getAnimatedValue();
                 ViewGroup.LayoutParams layoutParams = showIv.getLayoutParams();
-                layoutParams.width= (int) (animatedValue*300);
-                layoutParams.height= (int) (animatedValue*300);
+                layoutParams.width = (int) (animatedValue * 300);
+                layoutParams.height = (int) (animatedValue * 300);
                 showIv.setLayoutParams(layoutParams);
                 showIv.setAlpha(animatedValue);
             }
@@ -159,9 +169,10 @@ public class MainActivity extends AppCompatActivity {
         valueAnimator.setDuration(3000);
         valueAnimator.start();
     }
+
     //通过引用ValueAnimation的xml文件完成动画
-    private void useValueAnimatorXml(){
-        ValueAnimator animator = (ValueAnimator) AnimatorInflater.loadAnimator(MainActivity.this,R.animator.value_animator);
+    private void useValueAnimatorXml() {
+        ValueAnimator animator = (ValueAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.value_animator);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -172,22 +183,25 @@ public class MainActivity extends AppCompatActivity {
         animator.setDuration(3000);
         animator.start();
     }
+
     //通过引用ObjectAnimator的xml文件完成动画
-    private void useObjectAnimatorXml(){
+    private void useObjectAnimatorXml() {
         ObjectAnimator animator = (ObjectAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.object_animator);
         animator.setTarget(showIv);
         animator.start();
     }
+
     //通过引用AnimatorSet的xml文件完成动画
-    private void useAnimatorSetXml(){
+    private void useAnimatorSetXml() {
         AnimatorSet animator = (AnimatorSet) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.set_animator);
         animator.setTarget(showIv);
         animator.start();
     }
+
     //通过值动画来改变背景颜色
-    private void ValueAnimatorSetBackgrundColor(){
+    private void ValueAnimatorSetBackgrundColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ValueAnimator valueAnimator = ValueAnimator.ofArgb(0xffff0000, 0xff0000ff,0xff00ff00);
+            ValueAnimator valueAnimator = ValueAnimator.ofArgb(0xffff0000, 0xff0000ff, 0xff00ff00);
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -198,6 +212,33 @@ public class MainActivity extends AppCompatActivity {
             valueAnimator.setDuration(2000);
             valueAnimator.start();
         }
+    }
+
+    //通过ValueAnimator完成对自定义View对象的动画效果
+    private void ValueAnimatorOfObject() {
+        Point startPoint = new Point(0, 0);
+        Point endPoint = new Point(1000, 1000);
+        //fraction是一个从0到1变化的值
+        ValueAnimator valueAnimator = ValueAnimator.ofObject(new TypeEvaluator<Point>() {
+            @Override
+            public Point evaluate(float fraction, Point startValue, Point endValue) {
+                float startX = startValue.getX();
+                float endX = endValue.getX();
+                float currentX = startX + fraction * (endX - startX);
+
+                float startY = startValue.getY();
+                float endY = endValue.getY();
+                float currentY = startY + fraction * (endY - startY);
+                return new Point(currentX, currentY);
+            }
+
+        }, startPoint, endPoint);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Point point = (Point) animation.getAnimatedValue();
+            }
+        });
     }
 
 }
